@@ -1,12 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const { stdin, stdout } = process;
 
-const { inputFile, outputFIle } = require('./cli-parser');
+const { inputFile, outputFile } = require('./cli-parser');
 const CipherTransform = require('./transformer');
 
 const cipher = new CipherTransform();
 
-const readableStream = fs.createReadStream(path.join(__dirname, inputFile));
-const writableStream = fs.createWriteStream(path.join(__dirname, outputFIle));
+const readableStream = inputFile ? fs.createReadStream(path.join(__dirname, inputFile)) : stdin;
+const writableStream = outputFile ? fs.createWriteStream(path.join(__dirname, outputFile)) : stdout;
 
 readableStream.pipe(cipher).pipe(writableStream);

@@ -10,7 +10,7 @@ const getValue = (flag) => {
   }
 
   const flagIndex = commands.indexOf(flag);
-  return commands[flagIndex + 1];
+  return flagIndex !== -1 ? commands[flagIndex + 1] : null;
 };
 
 module.exports = {
