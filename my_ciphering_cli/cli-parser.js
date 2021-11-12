@@ -16,5 +16,5 @@ const getValue = (flag) => {
 module.exports = {
   config: getValue('-c'),
   inputFile: getValue('-i'),
-  outputFIle: getValue('-o'),
+  outputFile: getValue('-o'),
 };
