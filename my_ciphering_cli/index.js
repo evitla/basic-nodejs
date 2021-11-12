@@ -1,8 +1,9 @@
-const fs = require('fs');
 const path = require('path');
 const { pipeline } = require('stream');
 
 const { config, inputFile, outputFile } = require('./cli-parser');
+const CustomReadable = require('./custom-readable');
+const CustomWritable = require('./custom-writable');
 const { CaesarTransform, Rot8Transform, AtbashTransform } = require('./transformer');
 
 const { stdin, stdout } = process;
@@ -21,12 +22,14 @@ const cipherTransforms = config.split('-').map((cipher) => {
   }
 });
 
-const readableStream = inputFile ? fs.createReadStream(path.join(__dirname, inputFile)) : stdin;
-const writableStream = outputFile ? fs.createWriteStream(path.join(__dirname, outputFile)) : stdout;
+const readableStream = inputFile ? new CustomReadable(path.join(__dirname, inputFile)) : stdin;
+const writableStream = outputFile
+  ? new CustomWritable(path.join(__dirname, outputFile), { flags: 'a' })
+  : stdout;
 
 pipeline(readableStream, ...cipherTransforms, writableStream, (err) => {
   if (err) {
-    process.stderr.write(`Error: ${err.message}`);
+    process.stderr.write(`Error: ${err.message}\n`);
     process.exit(1);
   }
 });
