@@ -4,13 +4,13 @@ const { pipeline } = require('stream');
 const { config, inputFile, outputFile } = require('./cli-parser');
 const customStreams = require('./custom-streams');
 const handleError = require('./error-handler');
-const { transformStream } = require('./utils');
+const { getTransformStream } = require('./utils');
 
 const { stdin, stdout } = process;
 
 const transformStreams = config.split('-').map((cipher) => {
   try {
-    return transformStream(cipher);
+    return getTransformStream(cipher);
   } catch (err) {
     handleError(err);
   }

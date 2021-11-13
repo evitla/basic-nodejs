@@ -1,7 +1,7 @@
 const customStreams = require('./custom-streams');
 const { InvalidConfigError } = require('./custom-errors');
 
-const transformStream = (cipher) => {
+const getTransformStream = (cipher) => {
   switch (cipher) {
     case 'C0':
     case 'C1':
@@ -17,5 +17,5 @@ const transformStream = (cipher) => {
 };
 
 module.exports = {
-  transformStream,
+  getTransformStream,
 };
