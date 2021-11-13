@@ -42,8 +42,13 @@ const getTransformStream = (cipher) => {
   }
 };
 
+const getTransformStreams = (config) => {
+  if (!config) throw new InvalidConfigError('Config not found');
+  return config.split('-').map((cipher) => getTransformStream(cipher));
+};
+
 module.exports = {
   getReadStream,
   getWriteStream,
-  getTransformStream,
+  getTransformStreams,
 };
