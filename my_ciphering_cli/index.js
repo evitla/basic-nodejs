@@ -1,30 +1,19 @@
 const path = require('path');
 const { pipeline } = require('stream');
-
-const { config, inputFile, outputFile } = require('./cli-parser');
-const customStreams = require('./custom-streams');
-const handleError = require('./error-handler');
-const { getTransformStream } = require('./utils');
-
 const { stdin, stdout } = process;
 
-const transformStreams = config.split('-').map((cipher) => {
-  try {
-    return getTransformStream(cipher);
-  } catch (err) {
-    handleError(err);
-  }
-});
+const { config, inputFile, outputFile } = require('./cli-parser');
+const handleError = require('./error-handler');
+const { getReadStream, getWriteStream, getTransformStream } = require('./utils');
 
-const readableStream = inputFile
-  ? new customStreams.ReadableStream(path.join(__dirname, inputFile))
-  : stdin;
-const writableStream = outputFile
-  ? new customStreams.WritableStream(path.join(__dirname, outputFile), { flags: 'a' })
-  : stdout;
+const main = async (src, dest) => {
+  const readStream = src !== null ? await getReadStream(path.join(__dirname, src)) : stdin;
+  const writeStream = dest !== null ? await getWriteStream(path.join(__dirname, dest)) : stdout;
+  const transformStreams = config.split('-').map((cipher) => getTransformStream(cipher));
 
-pipeline(readableStream, ...transformStreams, writableStream, (err) => {
-  if (err) {
-    handleError(err);
-  }
-});
+  pipeline(readStream, ...transformStreams, writeStream, (err) => {
+    if (err) handleError(err);
+  });
+};
+
+main(inputFile, outputFile).catch(handleError);
