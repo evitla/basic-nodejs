@@ -11,7 +11,7 @@ const configMap = {
   A: cipher(),
 };
 
-class CaesarTransform extends Transform {
+class CustomTransform extends Transform {
   constructor(cipher) {
     super();
 
@@ -26,33 +26,21 @@ class CaesarTransform extends Transform {
   }
 }
 
-class Rot8Transform extends Transform {
+class CaesarTransform extends CustomTransform {
   constructor(cipher) {
-    super();
-
-    this.cipher = cipher;
-  }
-
-  _transform(chunk, encoding, cb) {
-    const cryptedText = configMap[this.cipher](chunk.toString());
-
-    this.push(cryptedText);
-    cb();
+    super(cipher);
   }
 }
 
-class AtbashTransform extends Transform {
+class Rot8Transform extends CustomTransform {
   constructor(cipher) {
-    super();
-
-    this.cipher = cipher;
+    super(cipher);
   }
+}
 
-  _transform(chunk, encoding, cb) {
-    const cryptedText = configMap[this.cipher](chunk.toString());
-
-    this.push(cryptedText);
-    cb();
+class AtbashTransform extends CustomTransform {
+  constructor(cipher) {
+    super(cipher);
   }
 }
 
