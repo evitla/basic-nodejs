@@ -2,10 +2,12 @@ const customStreams = require('./custom-streams');
 const { InvalidConfigError } = require('./custom-errors');
 
 const transformStream = (cipher) => {
-  switch (cipher[0]) {
-    case 'C':
+  switch (cipher) {
+    case 'C0':
+    case 'C1':
       return new customStreams.CaesarTransform(cipher);
-    case 'R':
+    case 'R0':
+    case 'R1':
       return new customStreams.Rot8Transform(cipher);
     case 'A':
       return new customStreams.AtbashTransform(cipher);
