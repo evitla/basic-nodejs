@@ -1,7 +1,7 @@
 const { Transform } = require('stream');
 
-const cipher = require('./cipher');
-const { caesarShift, rot8Shift } = require('./constants');
+const cipher = require('../cipher');
+const { caesarShift, rot8Shift } = require('../constants');
 
 const configMap = {
   C0: cipher(caesarShift),
