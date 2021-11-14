@@ -1,12 +1,23 @@
-const { stdout } = process;
-const { allowedFlags } = require('./constants');
+const { correspondFlag } = require('./constants');
+const { InvalidArgumentError } = require('./custom-errors');
+const handleError = require('./error-handler');
 
 const commands = process.argv.slice(2);
 
+const checkArgument = (flag) => {
+  const cf = correspondFlag[flag];
+  const countFlag = commands.filter((command) => command === flag || command === cf).length;
+
+  if (countFlag > 1) {
+    throw new InvalidArgumentError(`"${flag}/${cf}" found multiple argument.`);
+  }
+};
+
 const getValue = (flag) => {
-  if (!allowedFlags.includes(flag)) {
-    stdout.write(`Command ${flag} not found. Only -c, -i and -o commands are allowed!\n`);
-    process.exit();
+  try {
+    checkArgument(flag);
+  } catch (err) {
+    handleError(err);
   }
 
   const flagIndex = commands.indexOf(flag);
@@ -14,7 +25,7 @@ const getValue = (flag) => {
 };
 
 module.exports = {
-  config: getValue('-c') || getValue('--config'),
-  inputFile: getValue('-i') || getValue('--input'),
-  outputFile: getValue('-o') || getValue('--output'),
+  config: getValue('-c') || getValue(correspondFlag['-c']),
+  inputFile: getValue('-i') || getValue(correspondFlag['-i']),
+  outputFile: getValue('-o') || getValue(correspondFlag['-o']),
 };
