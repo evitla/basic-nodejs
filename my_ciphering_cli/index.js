@@ -4,7 +4,7 @@ const { stdin, stdout } = process;
 
 const { config, inputFile, outputFile } = require('./cli-parser');
 const handleError = require('./error-handler');
-const { getReadStream, getWriteStream, getTransformStreams } = require('./utils');
+const { getReadStream, getWriteStream, getTransformStreams } = require('./custom-streams/utils');
 
 const main = async (src, dest) => {
   const readStream = src !== null ? await getReadStream(path.join(__dirname, src)) : stdin;

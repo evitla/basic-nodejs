@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-const customStreams = require('./custom-streams');
-const { InvalidArgumentError, FileNotFoundError } = require('./custom-errors');
+const customStreams = require('.');
+const { InvalidArgumentError, FileNotFoundError } = require('../custom-errors');
 
 const hasAccess = (filename, mode) => {
   return new Promise((resolve, reject) => {
