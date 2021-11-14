@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const customStreams = require('./custom-streams');
-const { InvalidConfigError, FileNotFoundError } = require('./custom-errors');
+const { InvalidArgumentError, FileNotFoundError } = require('./custom-errors');
 
 const hasAccess = (filename, mode) => {
   return new Promise((resolve, reject) => {
@@ -38,12 +38,12 @@ const getTransformStream = (cipher) => {
     case 'A':
       return new customStreams.AtbashTransform(cipher);
     default:
-      throw new InvalidConfigError(`"${cipher}" cipher mark not found`);
+      throw new InvalidArgumentError(`"${cipher}" cipher mark not found`);
   }
 };
 
 const getTransformStreams = (config) => {
-  if (!config) throw new InvalidConfigError('Config not found');
+  if (!config) throw new InvalidArgumentError('Config not found');
   return config.split('-').map((cipher) => getTransformStream(cipher));
 };
 

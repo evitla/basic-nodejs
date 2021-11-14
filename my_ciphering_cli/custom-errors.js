@@ -12,13 +12,6 @@ class InvalidArgumentError extends CustomError {
   }
 }
 
-class InvalidConfigError extends CustomError {
-  constructor(message) {
-    super(message);
-    this.name = 'InvalidConfigError';
-  }
-}
-
 class FileNotFoundError extends CustomError {
   constructor(message) {
     super(message);
@@ -28,6 +21,5 @@ class FileNotFoundError extends CustomError {
 
 module.exports = {
   InvalidArgumentError,
-  InvalidConfigError,
   FileNotFoundError,
 };
