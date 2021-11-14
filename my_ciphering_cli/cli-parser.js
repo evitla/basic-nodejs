@@ -16,12 +16,17 @@ const checkArgument = (flag) => {
 const getValue = (flag) => {
   try {
     checkArgument(flag);
+
+    const flagIndex = commands.indexOf(flag);
+
+    if (flagIndex === commands.length - 1) {
+      throw new InvalidArgumentError(`Command line ends with "${flag}". Pass the argument.`);
+    }
+
+    return flagIndex !== -1 ? commands[flagIndex + 1] : null;
   } catch (err) {
     handleError(err);
   }
-
-  const flagIndex = commands.indexOf(flag);
-  return flagIndex !== -1 ? commands[flagIndex + 1] : null;
 };
 
 module.exports = {
