@@ -6,37 +6,21 @@ class ReadableStream extends Readable {
     super();
 
     this.filename = filename;
-    this.fd = null;
+    this.fd = 0;
   }
 
   _construct(callback) {
-    fs.open(this.filename, (err, fd) => {
-      if (err) {
-        callback(err);
-      } else {
-        this.fd = fd;
-        callback();
-      }
+    fs.open(this.filename, (_, fd) => {
+      this.fd = fd;
+      callback();
     });
   }
 
   _read(size) {
     const buf = Buffer.alloc(size);
-    fs.read(this.fd, buf, 0, size, null, (err, bytesRead) => {
-      if (err) {
-        this.destroy(err);
-      } else {
-        this.push(bytesRead > 0 ? buf.slice(0, bytesRead) : null);
-      }
+    fs.read(this.fd, buf, 0, size, null, (_, bytesRead) => {
+      this.push(bytesRead > 0 ? buf.slice(0, bytesRead) : null);
     });
-  }
-
-  _destroy(err, callback) {
-    if (this.fd) {
-      fs.close(this.fd, (er) => callback(er || err));
-    } else {
-      callback(err);
-    }
   }
 }
 
