@@ -1,20 +1,19 @@
 const fs = require('fs');
-const path = require('path');
 const ReadableStream = require('./readable');
 
 describe('ReadableStream', () => {
-  it('should implement Caesar cipher', () => {
+  it('should call _construct method', () => {
     jest.spyOn(fs, 'open');
-    const existingFilePath = './inputs.txt';
+    const existingFilePath = './input.txt';
     const readstream = new ReadableStream(existingFilePath);
     readstream._construct(() => {});
     expect(fs.open).toHaveBeenCalled();
     fs.open.mockRestore();
   });
 
-  it('should implement Caesar cipher', () => {
+  it('should call _read method', () => {
     jest.spyOn(fs, 'read');
-    const existingFilePath = './inputs.txt';
+    const existingFilePath = './input.txt';
     const readstream = new ReadableStream(existingFilePath);
     readstream._read(512);
     expect(fs.read).toHaveBeenCalled();
