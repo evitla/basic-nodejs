@@ -1,10 +1,7 @@
 const { correspondFlag } = require('./constants');
 const { InvalidArgumentError } = require('./custom-errors');
-const handleError = require('./error-handler');
 
-const commands = process.argv.slice(2);
-
-const checkArgument = (flag) => {
+const checkArgument = (flag, commands) => {
   const cf = correspondFlag[flag];
   const countFlag = commands.filter((command) => command === flag || command === cf).length;
 
@@ -13,24 +10,20 @@ const checkArgument = (flag) => {
   }
 };
 
-const getValue = (flag) => {
-  try {
-    checkArgument(flag);
+const getValue = (flag, commands) => {
+  if (commands.length === 1) return null;
 
-    const flagIndex = commands.indexOf(flag);
+  checkArgument(flag, commands);
 
-    if (flagIndex === commands.length - 1) {
-      throw new InvalidArgumentError(`Command line ends with "${flag}". Pass the argument.`);
-    }
+  const flagIndex = commands.indexOf(flag);
 
-    return flagIndex !== -1 ? commands[flagIndex + 1] : null;
-  } catch (err) {
-    handleError(err);
+  if (flagIndex === commands.length - 1) {
+    throw new InvalidArgumentError(`Command line ends with "${flag}". Pass the argument.`);
   }
+
+  return flagIndex !== -1 ? commands[flagIndex + 1] : null;
 };
 
 module.exports = {
-  config: getValue('-c') || getValue(correspondFlag['-c']),
-  inputFile: getValue('-i') || getValue(correspondFlag['-i']),
-  outputFile: getValue('-o') || getValue(correspondFlag['-o']),
+  getValue,
 };
