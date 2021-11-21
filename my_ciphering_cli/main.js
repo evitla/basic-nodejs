@@ -16,7 +16,9 @@ const main = async (commands) => {
   const writeStream = dest !== null ? await getWriteStream(path.join(__dirname, dest)) : stdout;
   const transformStreams = getTransformStreams(config);
 
-  pipeline(readStream, ...transformStreams, writeStream, handleError);
+  pipeline(readStream, ...transformStreams, writeStream, (err) => {
+    if (err) handleError(err);
+  });
 };
 
 module.exports = main;
