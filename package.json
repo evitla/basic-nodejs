@@ -19,5 +19,20 @@
   "bugs": {
     "url": "https://github.com/evitla/basic-nodejs/issues"
   },
-  "homepage": "https://github.com/evitla/basic-nodejs#readme"
+  "homepage": "https://github.com/evitla/basic-nodejs#readme",
+  "jest": {
+    "collectCoverageFrom": [
+      "./**/*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/coverage/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 85,
+        "lines": 70
+      }
+    }
+  }
 }
