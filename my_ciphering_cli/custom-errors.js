@@ -20,6 +20,7 @@ class FileNotFoundError extends CustomError {
 }
 
 module.exports = {
+  CustomError,
   InvalidArgumentError,
   FileNotFoundError,
 };
