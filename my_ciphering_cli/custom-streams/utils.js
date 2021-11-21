@@ -17,15 +17,15 @@ const hasAccess = (filename, mode) => {
   });
 };
 
-const getReadStream = async (filename) =>
-  (await hasAccess(filename, fs.constants.R_OK))
-    ? new customStreams.ReadableStream(filename)
-    : null;
+const getReadStream = async (filename) => {
+  await hasAccess(filename, fs.constants.R_OK);
+  return new customStreams.ReadableStream(filename);
+};
 
-const getWriteStream = async (filename) =>
-  (await hasAccess(filename, fs.constants.W_OK))
-    ? new customStreams.WritableStream(filename, { flags: 'a' })
-    : null;
+const getWriteStream = async (filename) => {
+  await hasAccess(filename, fs.constants.W_OK);
+  return new customStreams.WritableStream(filename, { flags: 'a' });
+};
 
 const getTransformStream = (cipher) => {
   switch (cipher) {
@@ -48,7 +48,9 @@ const getTransformStreams = (config) => {
 };
 
 module.exports = {
+  hasAccess,
   getReadStream,
   getWriteStream,
+  getTransformStream,
   getTransformStreams,
 };
